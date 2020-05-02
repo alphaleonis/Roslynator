@@ -264,7 +264,7 @@ namespace Roslynator.CommandLine
 
                 if (formattingAnalyzers != null)
                 {
-                    var message = new LogMessage("Update package 'Roslynator.Formatting.Analyzers' to '1.0.0'", Colors.Message_OK, Verbosity.Detailed);
+                    var message = new LogMessage("Update package 'Roslynator.Formatting.Analyzers' to '1.0.0'", Colors.Message_OK, Verbosity.Normal);
 
                     (messages ?? ( messages = new List<LogMessage>())).Add(message);
 
@@ -272,7 +272,7 @@ namespace Roslynator.CommandLine
                 }
                 else
                 {
-                    var message = new LogMessage("Add package 'Roslynator.Formatting.Analyzers 1.0.0'", Colors.Message_OK, Verbosity.Detailed);
+                    var message = new LogMessage("Add package 'Roslynator.Formatting.Analyzers 1.0.0'", Colors.Message_OK, Verbosity.Normal);
 
                     (messages ?? (messages = new List<LogMessage>())).Add(message);
 
@@ -305,8 +305,6 @@ namespace Roslynator.CommandLine
             }
             else
             {
-                WriteLine($"Package 'Roslynator.Formatting.Analyzers' not found in '{path}'", Verbosity.Detailed);
-
                 return CommandResult.None;
             }
         }
@@ -340,10 +338,7 @@ namespace Roslynator.CommandLine
             XElement analyzers = document.Root.Elements("Rules").LastOrDefault(f => f.Attribute("AnalyzerId")?.Value == "Roslynator.CSharp.Analyzers");
 
             if (analyzers == null)
-            {
-                WriteLine($"No rules to migrate found in '{path}'", Verbosity.Detailed);
                 return CommandResult.None;
-            }
 
             XElement formattingAnalyzers = document.Root.Elements("Rules").FirstOrDefault(f => f.Attribute("AnalyzerId")?.Value == "Roslynator.Formatting.Analyzers");
 
@@ -375,7 +370,7 @@ namespace Roslynator.CommandLine
                         new XAttribute("Id", newId),
                         new XAttribute("Action", action));
 
-                    var message = new LogMessage($"Update rule '{kvp.Key}' to '{newId}' ({action})", Colors.Message_OK, Verbosity.Detailed);
+                    var message = new LogMessage($"Update rule '{kvp.Key}' to '{newId}' ({action})", Colors.Message_OK, Verbosity.Normal);
 
                     (messages ?? (messages = new List<LogMessage>())).Add(message);
 
@@ -406,7 +401,6 @@ namespace Roslynator.CommandLine
                 return CommandResult.Success;
             }
 
-            WriteLine($"No rules to migrate found in '{path}'", Verbosity.Detailed);
             return CommandResult.None;
         }
 
