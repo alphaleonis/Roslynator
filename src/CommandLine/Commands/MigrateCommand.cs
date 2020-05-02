@@ -101,17 +101,17 @@ namespace Roslynator.CommandLine
         {
             if (Directory.Exists(path))
             {
-                WriteLine($"Search '{path}'", Verbosity.Normal);
+                WriteLine($"Search '{path}'", Verbosity.Detailed);
                 return ExecuteDirectory(path, cancellationToken);
             }
             else if (File.Exists(path))
             {
-                WriteLine($"Search '{path}'", Verbosity.Normal);
+                WriteLine($"Search '{path}'", Verbosity.Detailed);
                 return ExecuteFile(path);
             }
             else
             {
-                WriteLine($"File or directory not found: '{path}'", Verbosity.Normal);
+                WriteLine($"File or directory not found: '{path}'", Colors.Message_Warning, Verbosity.Minimal);
             }
 
             return CommandResult.None;
@@ -170,16 +170,15 @@ namespace Roslynator.CommandLine
 
         private CommandResult ExecuteProject(string path)
         {
-            WriteLine($"  Analyze '{path}'", Verbosity.Normal);
-
             XDocument document;
             try
             {
-                document = XDocument.Load(path, LoadOptions.PreserveWhitespace);
+                document = XDocument.Load(path, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
             }
             catch (XmlException ex)
             {
-                WriteError(ex);
+                WriteLine($"Cannot load '{path}'", Verbosity.Minimal);
+                WriteError(ex, verbosity: Verbosity.Minimal);
                 return CommandResult.None;
             }
 
@@ -187,12 +186,13 @@ namespace Roslynator.CommandLine
 
             if (root.Attribute("Sdk")?.Value == "Microsoft.NET.Sdk")
             {
+                WriteLine($"Analyze '{path}'", Verbosity.Detailed);
                 return ExecuteProject(path, document);
             }
             else
             {
                 //TODO: Migrate old-style project
-                WriteLine("    Project does not support migration", Colors.Message_Warning);
+                WriteLine($"Project does not support migration: '{path}'", Colors.Message_Warning, Verbosity.Detailed);
 
                 return CommandResult.None;
             }
@@ -200,7 +200,7 @@ namespace Roslynator.CommandLine
 
         private CommandResult ExecuteProject(string path, XDocument document)
         {
-            bool shouldSave = false;
+            List<LogMessage> messages = null;
 
             foreach (XElement itemGroup in document.Root.Descendants("ItemGroup"))
             {
@@ -224,15 +224,13 @@ namespace Roslynator.CommandLine
                 if (analyzers == null)
                     continue;
 
-                shouldSave = true;
-
                 if (formattingAnalyzers != null)
                 {
                     string versionText = formattingAnalyzers.Attribute("Version")?.Value;
 
                     if (versionText == null)
                     {
-                        WriteLine($"    Version attribute not found: '{formattingAnalyzers}'", Colors.Message_Warning, Verbosity.Normal);
+                        WriteXmlError(formattingAnalyzers, "Version attribute not found");
                         continue;
                     }
 
@@ -242,7 +240,7 @@ namespace Roslynator.CommandLine
 
                         if (match?.Success != true)
                         {
-                            WriteLine($"    Invalid version: '{formattingAnalyzers}'", Colors.Message_Warning, Verbosity.Normal);
+                            WriteXmlError(formattingAnalyzers, $"Invalid version '{versionText}'");
                             continue;
                         }
 
@@ -252,7 +250,7 @@ namespace Roslynator.CommandLine
 
                         if (!Version.TryParse(versionText, out Version version))
                         {
-                            WriteLine($"    Invalid version: '{formattingAnalyzers}'", Colors.Message_Warning, Verbosity.Normal);
+                            WriteXmlError(formattingAnalyzers, $"Invalid version '{versionText}'");
                             continue;
                         }
 
@@ -266,12 +264,17 @@ namespace Roslynator.CommandLine
 
                 if (formattingAnalyzers != null)
                 {
-                    WriteLine("    Update package 'Roslynator.Formatting.Analyzers' to '1.0.0'", Colors.Message_OK, Verbosity.Normal);
+                    var message = new LogMessage("Update package 'Roslynator.Formatting.Analyzers' to '1.0.0'", Colors.Message_OK, Verbosity.Detailed);
+
+                    (messages ?? ( messages = new List<LogMessage>())).Add(message);
+
                     formattingAnalyzers.SetAttributeValue("Version", "1.0.0");
                 }
                 else
                 {
-                    WriteLine("    Add package 'Roslynator.Formatting.Analyzers 1.0.0'", Colors.Message_OK, Verbosity.Normal);
+                    var message = new LogMessage("Add package 'Roslynator.Formatting.Analyzers 1.0.0'", Colors.Message_OK, Verbosity.Detailed);
+
+                    (messages ?? (messages = new List<LogMessage>())).Add(message);
 
                     XText whitespace = null;
 
@@ -286,9 +289,9 @@ namespace Roslynator.CommandLine
                 }
             }
 
-            if (shouldSave)
+            if (messages != null)
             {
-                WriteLine($"    Save changes to '{path}'", (DryRun) ? Colors.Message_DryRun : Colors.Message_OK, Verbosity.Minimal);
+                WriteUpdateMessages(path, messages);
 
                 if (!DryRun)
                 {
@@ -302,7 +305,7 @@ namespace Roslynator.CommandLine
             }
             else
             {
-                WriteLine("    Package 'Roslynator.Formatting.Analyzers' not found", Verbosity.Normal);
+                WriteLine($"Package 'Roslynator.Formatting.Analyzers' not found in '{path}'", Verbosity.Detailed);
 
                 return CommandResult.None;
             }
@@ -310,8 +313,6 @@ namespace Roslynator.CommandLine
 
         private CommandResult ExecuteRuleSet(string path)
         {
-            WriteLine($"  Analyze '{path}'", Verbosity.Normal);
-
             XDocument document;
             try
             {
@@ -319,9 +320,12 @@ namespace Roslynator.CommandLine
             }
             catch (XmlException ex)
             {
-                WriteError(ex);
+                WriteLine($"Cannot load '{path}'", Verbosity.Minimal);
+                WriteError(ex, verbosity: Verbosity.Minimal);
                 return CommandResult.None;
             }
+
+            WriteLine($"Analyze '{path}'", Verbosity.Detailed);
 
             var ids = new Dictionary<string, XElement>();
 
@@ -337,7 +341,7 @@ namespace Roslynator.CommandLine
 
             if (analyzers == null)
             {
-                WriteLine("    No rules to migrate", Verbosity.Normal);
+                WriteLine($"No rules to migrate found in '{path}'", Verbosity.Detailed);
                 return CommandResult.None;
             }
 
@@ -353,7 +357,7 @@ namespace Roslynator.CommandLine
                 analyzers.AddAfterSelf(formattingAnalyzers);
             }
 
-            bool shouldSave = false;
+            List<LogMessage> messages = null;
 
             foreach (KeyValuePair<string, XElement> kvp in ids)
             {
@@ -371,20 +375,20 @@ namespace Roslynator.CommandLine
                         new XAttribute("Id", newId),
                         new XAttribute("Action", action));
 
-                    WriteLine($"    Update rule '{kvp.Key}' to '{newId}' ({action})", Colors.Message_OK, Verbosity.Normal);
+                    var message = new LogMessage($"Update rule '{kvp.Key}' to '{newId}' ({action})", Colors.Message_OK, Verbosity.Detailed);
+
+                    (messages ?? (messages = new List<LogMessage>())).Add(message);
 
                     formattingAnalyzers.Add(newRule);
 
                     if (kvp.Value.Parent != null)
                         kvp.Value.Remove();
-
-                    shouldSave = true;
                 }
             }
 
-            if (shouldSave)
+            if (messages != null)
             {
-                WriteLine($"    Save changes to '{path}'", (DryRun) ? Colors.Message_DryRun : Colors.Message_OK, Verbosity.Minimal);
+                WriteUpdateMessages(path, messages);
 
                 if (!DryRun)
                 {
@@ -402,8 +406,24 @@ namespace Roslynator.CommandLine
                 return CommandResult.Success;
             }
 
-            WriteLine("    No rules to migrate", Verbosity.Normal);
+            WriteLine($"No rules to migrate found in '{path}'", Verbosity.Detailed);
             return CommandResult.None;
+        }
+
+        private static void WriteXmlError(XElement element, string message)
+        {
+            WriteLine($"{message}, line: {((IXmlLineInfo)element).LineNumber}, file: '{element}'", Colors.Message_Warning, Verbosity.Detailed);
+        }
+
+        private static void WriteUpdateMessages(string path, List<LogMessage> messages)
+        {
+            WriteLine($"Update '{path}'", Colors.Message_OK, Verbosity.Minimal);
+
+            foreach (LogMessage update in messages)
+            {
+                Write("  ", update.Verbosity);
+                WriteLine(update);
+            }
         }
 
         protected virtual void OperationCanceled(OperationCanceledException ex)
