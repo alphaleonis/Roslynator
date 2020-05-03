@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
@@ -16,7 +17,23 @@ namespace Roslynator.CommandLine
 {
     internal class MigrateCommand
     {
-        private static readonly Regex _versionRegex = new Regex(@"\A(?<version>\d+\.\d+\.\d+)(?<suffix>(-.*)?)\z");
+        private static readonly Regex _versionRegex = new Regex(@"\A(?<version>\d+\.\d+\.\d+)(?<suffix>-.*)?\z");
+
+        private static readonly Regex _editorConfigRegex = new Regex(@"
+            dotnet_diagnostic\.
+            (?<id>
+                RCS[0-9]{4}[a-z]?
+            )
+            \.severity\ +=\ +
+            (?<severity>
+                error|warning|suggestion|silent|none|default
+            )
+            (?<trailing>
+                [^\r\n]*
+                (?<eol>\r?\n)?
+            )
+            ",
+            RegexOptions.IgnorePatternWhitespace);
 
         public MigrateCommand(ImmutableArray<string> paths, string identifier, Version version, bool dryRun)
         {
@@ -163,6 +180,16 @@ namespace Roslynator.CommandLine
                 if (!GeneratedCodeUtility.IsGeneratedCodeFile(path))
                     return ExecuteRuleSet(path);
             }
+            else
+            {
+                string fileName = Path.GetFileName(path);
+
+                if (string.Equals(fileName, ".editorconfig", StringComparison.OrdinalIgnoreCase)
+                    && !GeneratedCodeUtility.IsGeneratedCodeFile(path))
+                {
+                    return ExecuteEditorConfig(path);
+                }
+            }
 
             WriteLine(path, Verbosity.Diagnostic);
             return CommandResult.None;
@@ -177,7 +204,7 @@ namespace Roslynator.CommandLine
             }
             catch (XmlException ex)
             {
-                WriteLine($"Cannot load '{path}'", Verbosity.Minimal);
+                WriteLine($"Cannot load '{path}'", Colors.Message_Warning, Verbosity.Minimal);
                 WriteError(ex, verbosity: Verbosity.Minimal);
                 return CommandResult.None;
             }
@@ -238,15 +265,13 @@ namespace Roslynator.CommandLine
                     {
                         Match match = _versionRegex.Match(versionText);
 
-                        if (match?.Success != true)
+                        if (!match.Success)
                         {
                             WriteXmlError(formattingAnalyzers, $"Invalid version '{versionText}'");
                             continue;
                         }
 
                         versionText = match.Groups["version"].Value;
-
-                        string suffix = match.Groups["suffix"]?.Value;
 
                         if (!Version.TryParse(versionText, out Version version))
                         {
@@ -255,7 +280,7 @@ namespace Roslynator.CommandLine
                         }
 
                         if (version > Versions.Version_1_0_0
-                            || suffix == null)
+                            || !match.Groups["suffix"].Success)
                         {
                             continue;
                         }
@@ -266,7 +291,7 @@ namespace Roslynator.CommandLine
                 {
                     var message = new LogMessage("Update package 'Roslynator.Formatting.Analyzers' to '1.0.0'", Colors.Message_OK, Verbosity.Normal);
 
-                    (messages ?? ( messages = new List<LogMessage>())).Add(message);
+                    (messages ?? (messages = new List<LogMessage>())).Add(message);
 
                     formattingAnalyzers.SetAttributeValue("Version", "1.0.0");
                 }
@@ -318,7 +343,7 @@ namespace Roslynator.CommandLine
             }
             catch (XmlException ex)
             {
-                WriteLine($"Cannot load '{path}'", Verbosity.Minimal);
+                WriteLine($"Cannot load '{path}'", Colors.Message_Warning, Verbosity.Minimal);
                 WriteError(ex, verbosity: Verbosity.Minimal);
                 return CommandResult.None;
             }
@@ -404,6 +429,95 @@ namespace Roslynator.CommandLine
             return CommandResult.None;
         }
 
+        private CommandResult ExecuteEditorConfig(string path)
+        {
+            string content;
+            Encoding encoding = null;
+
+            try
+            {
+                content = ReadFile(path, ref encoding);
+            }
+            catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+            {
+                WriteLine($"Cannot load '{path}'", Verbosity.Minimal);
+                WriteError(ex, verbosity: Verbosity.Minimal);
+                return CommandResult.None;
+            }
+
+            WriteLine($"Analyze '{path}'", Verbosity.Detailed);
+
+            Match fileEolMatch = Regex.Match(content, "\r?\n");
+
+            string fileEol = (fileEolMatch.Success) ? fileEolMatch.Value : Environment.NewLine;
+
+            List<LogMessage> messages = null;
+
+            content = _editorConfigRegex.Replace(content, match =>
+            {
+                string id = match.Groups["id"].Value;
+                string severity = match.Groups["severity"].Value;
+
+                if (!AnalyzersMapping.Mapping.TryGetValue(id, out ImmutableArray<string> newIds))
+                    return match.Value;
+
+                ImmutableArray<string>.Enumerator en = newIds.GetEnumerator();
+
+                if (!en.MoveNext())
+                    return match.Value;
+
+                string newValue = match.Result($"dotnet_diagnostic.{en.Current}.severity = ${{severity}}${{trailing}}");
+
+                var message = new LogMessage($"Update rule '{id}' to '{en.Current}' ({severity})", Colors.Message_OK, Verbosity.Normal);
+
+                (messages ?? (messages = new List<LogMessage>())).Add(message);
+
+                if (en.MoveNext())
+                {
+                    Group eolGroup = match.Groups["eol"];
+                    string eolBefore = (eolGroup.Success) ? "" : fileEol;
+                    string eolAfter = (eolGroup.Success) ? fileEol : "";
+
+                    do
+                    {
+                        newValue += eolBefore
+                            + $"dotnet_diagnostic.{en.Current}.severity = {severity}"
+                            + eolAfter;
+
+                        message = new LogMessage($"Update rule '{id}' to '{en.Current}' ({severity})", Colors.Message_OK, Verbosity.Normal);
+
+                        messages.Add(message);
+
+                    } while (en.MoveNext());
+                }
+
+                return newValue;
+            });
+
+            if (messages != null)
+            {
+                WriteUpdateMessages(path, messages);
+
+                if (!DryRun)
+                {
+                    try
+                    {
+                        File.WriteAllText(path, content, encoding ?? Encodings.UTF8NoBom);
+                    }
+                    catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+                    {
+                        WriteLine($"Cannot save '{path}'", Colors.Message_Warning, Verbosity.Minimal);
+                        WriteError(ex, verbosity: Verbosity.Minimal);
+                        return CommandResult.None;
+                    }
+                }
+
+                return CommandResult.Success;
+            }
+
+            return CommandResult.None;
+        }
+
         private static void WriteXmlError(XElement element, string message)
         {
             WriteLine($"{message}, line: {((IXmlLineInfo)element).LineNumber}, file: '{element}'", Colors.Message_Warning, Verbosity.Detailed);
@@ -423,6 +537,26 @@ namespace Roslynator.CommandLine
         protected virtual void OperationCanceled(OperationCanceledException ex)
         {
             WriteLine("Operation was canceled.", Verbosity.Quiet);
+        }
+
+        private string ReadFile(
+            string filePath,
+            ref Encoding encoding)
+        {
+            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            {
+                Encoding encodingFromBom = EncodingHelpers.DetectEncoding(stream);
+
+                if (encodingFromBom != null)
+                    encoding = encodingFromBom;
+
+                stream.Position = 0;
+
+                using (var reader = new StreamReader(stream, encoding, detectEncodingFromByteOrderMarks: true))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
         }
     }
 }

@@ -1,0 +1,4 @@
+﻿
+dotnet_diagnostic.RCS1022.severity = error
+dotnet_diagnostic.RCS1023.severity = warning
+dotnet_diagnostic.RCS1024.severity = suggestion
