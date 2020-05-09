@@ -1,0 +1,4 @@
+﻿
+dotnet_diagnostic.RCS1022.severity = error
+
+dotnet_diagnostic.RCC1022.severity = error

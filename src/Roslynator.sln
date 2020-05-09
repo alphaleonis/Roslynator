@@ -133,8 +133,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCodeGenerator", "Tools\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing.Xunit", "Tests\Testing.Xunit\Testing.Xunit.csproj", "{CA7B4345-0758-4AFA-ADCC-2563640614BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migration.CommandLine", "Migration.CommandLine\Migration.CommandLine.csproj", "{7030539F-3611-4B03-87CB-81C096F5FED0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -293,10 +291,6 @@ Global
 		{CA7B4345-0758-4AFA-ADCC-2563640614BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA7B4345-0758-4AFA-ADCC-2563640614BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA7B4345-0758-4AFA-ADCC-2563640614BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7030539F-3611-4B03-87CB-81C096F5FED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7030539F-3611-4B03-87CB-81C096F5FED0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7030539F-3611-4B03-87CB-81C096F5FED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7030539F-3611-4B03-87CB-81C096F5FED0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
