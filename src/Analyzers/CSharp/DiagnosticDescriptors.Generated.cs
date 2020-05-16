@@ -472,15 +472,15 @@ namespace Roslynator.CSharp
             customTags:         WellKnownDiagnosticTags.Unnecessary);
 
         /// <summary>RCS1040</summary>
-        public static readonly DiagnosticDescriptor RemoveEmptyElse = Factory.Create(
-            id:                 DiagnosticIdentifiers.RemoveEmptyElse, 
-            title:              "Remove empty 'else'.", 
-            messageFormat:      "Remove empty 'else'.", 
+        public static readonly DiagnosticDescriptor RemoveEmptyElseClause = Factory.Create(
+            id:                 DiagnosticIdentifiers.RemoveEmptyElseClause, 
+            title:              "Remove empty 'else' clause.", 
+            messageFormat:      "Remove empty 'else' clause.", 
             category:           DiagnosticCategories.Redundancy, 
             defaultSeverity:    DiagnosticSeverity.Hidden, 
             isEnabledByDefault: true, 
             description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.RemoveEmptyElse, 
+            helpLinkUri:        DiagnosticIdentifiers.RemoveEmptyElseClause, 
             customTags:         WellKnownDiagnosticTags.Unnecessary);
 
         /// <summary>RCS1041</summary>
@@ -532,15 +532,15 @@ namespace Roslynator.CSharp
             customTags:         WellKnownDiagnosticTags.Unnecessary);
 
         /// <summary>RCS1045</summary>
-        public static readonly DiagnosticDescriptor RenamePrivateFieldAccordingToCamelCaseWithUnderscore = Factory.Create(
-            id:                 DiagnosticIdentifiers.RenamePrivateFieldAccordingToCamelCaseWithUnderscore, 
-            title:              "Rename private field according to camel case with underscore.", 
+        public static readonly DiagnosticDescriptor RenamePrivateFieldToCamelCaseWithUnderscore = Factory.Create(
+            id:                 DiagnosticIdentifiers.RenamePrivateFieldToCamelCaseWithUnderscore, 
+            title:              "Rename private field to camel case with underscore.", 
             messageFormat:      "Rename private field to camel case with underscore.", 
             category:           DiagnosticCategories.Naming, 
             defaultSeverity:    DiagnosticSeverity.Info, 
             isEnabledByDefault: false, 
             description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.RenamePrivateFieldAccordingToCamelCaseWithUnderscore, 
+            helpLinkUri:        DiagnosticIdentifiers.RenamePrivateFieldToCamelCaseWithUnderscore, 
             customTags:         Array.Empty<string>());
 
         /// <summary>RCS1046</summary>
@@ -1370,20 +1370,6 @@ namespace Roslynator.CSharp
             description:        null, 
             helpLinkUri:        DiagnosticIdentifiers.AddBracesToIfElse, 
             customTags:         Array.Empty<string>());
-
-        /// <summary>RCS1127</summary>
-        public static readonly DiagnosticDescriptor MergeLocalDeclarationWithAssignment = Factory.Create(
-            id:                 DiagnosticIdentifiers.MergeLocalDeclarationWithAssignment, 
-            title:              "Merge local declaration with assignment.", 
-            messageFormat:      "Merge local declaration with assignment.", 
-            category:           DiagnosticCategories.Simplification, 
-            defaultSeverity:    DiagnosticSeverity.Info, 
-            isEnabledByDefault: true, 
-            description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.MergeLocalDeclarationWithAssignment, 
-            customTags:         Array.Empty<string>());
-
-        public static readonly DiagnosticDescriptor MergeLocalDeclarationWithAssignmentFadeOut = DiagnosticDescriptorFactory.CreateFadeOut(MergeLocalDeclarationWithAssignment);
 
         /// <summary>RCS1128</summary>
         public static readonly DiagnosticDescriptor UseCoalesceExpression = Factory.Create(
@@ -2288,6 +2274,8 @@ namespace Roslynator.CSharp
             description:        null, 
             helpLinkUri:        DiagnosticIdentifiers.RemoveRedundantAssignment, 
             customTags:         Array.Empty<string>());
+
+        public static readonly DiagnosticDescriptor RemoveRedundantAssignmentFadeOut = DiagnosticDescriptorFactory.CreateFadeOut(RemoveRedundantAssignment);
 
         /// <summary>RCS1213</summary>
         public static readonly DiagnosticDescriptor RemoveUnusedMemberDeclaration = Factory.Create(

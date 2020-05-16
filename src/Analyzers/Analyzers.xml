@@ -763,9 +763,9 @@ public void Foo()
       </Sample>
     </Samples>
   </Analyzer>
-  <Analyzer Identifier="RemoveEmptyElse">
+  <Analyzer Identifier="RemoveEmptyElseClause">
     <Id>RCS1040</Id>
-    <Title>Remove empty 'else'.</Title>
+    <Title>Remove empty 'else' clause.</Title>
     <Category>Redundancy</Category>
     <DefaultSeverity>Hidden</DefaultSeverity>
     <IsEnabledByDefault>true</IsEnabledByDefault>
@@ -864,10 +864,9 @@ catch (Exception ex)
       </Sample>
     </Samples>
   </Analyzer>
-  <Analyzer Identifier="RenamePrivateFieldAccordingToCamelCaseWithUnderscore">
+  <Analyzer Identifier="RenamePrivateFieldToCamelCaseWithUnderscore">
     <Id>RCS1045</Id>
-    <Title>Rename private field according to camel case with underscore.</Title>
-    <MessageFormat>Rename private field to camel case with underscore.</MessageFormat>
+    <Title>Rename private field to camel case with underscore.</Title>
     <Category>Naming</Category>
     <DefaultSeverity>Info</DefaultSeverity>
     <IsEnabledByDefault>false</IsEnabledByDefault>
@@ -2423,7 +2422,7 @@ else
       </Sample>
     </Samples>
   </Analyzer>
-  <Analyzer Identifier="MergeLocalDeclarationWithAssignment">
+  <Analyzer Identifier="MergeLocalDeclarationWithAssignment" IsObsolete="true">
     <Id>RCS1127</Id>
     <Title>Merge local declaration with assignment.</Title>
     <Category>Simplification</Category>
@@ -4089,16 +4088,22 @@ return WhenFalse();]]></After>
     <Category>Redundancy</Category>
     <DefaultSeverity>Info</DefaultSeverity>
     <IsEnabledByDefault>true</IsEnabledByDefault>
+    <SupportsFadeOutAnalyzer>true</SupportsFadeOutAnalyzer>
     <Samples>
       <Sample>
-        <Before><![CDATA[bool Foo()
+        <Before><![CDATA[string x; // [|Id|]
+x = "";]]></Before>
+        <After><![CDATA[string x = "";]]></After>
+      </Sample>
+      <Sample>
+        <Before><![CDATA[bool M()
 {
     // ...
 
-    f = false; // [|Id|]
-    return f;
+    x = false; // [|Id|]
+    return x;
 }]]></Before>
-        <After><![CDATA[bool Foo()
+        <After><![CDATA[bool M()
 {
     // ...
 

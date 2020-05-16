@@ -45,12 +45,12 @@ namespace Roslynator.CSharp
         public const string RemoveTrailingWhitespace = "RCS1037";
         public const string RemoveEmptyStatement = "RCS1038";
         public const string RemoveArgumentListFromAttribute = "RCS1039";
-        public const string RemoveEmptyElse = "RCS1040";
+        public const string RemoveEmptyElseClause = "RCS1040";
         public const string RemoveEmptyInitializer = "RCS1041";
         public const string RemoveEnumDefaultUnderlyingType = "RCS1042";
         public const string RemovePartialModifierFromTypeWithSinglePart = "RCS1043";
         public const string RemoveOriginalExceptionFromThrowStatement = "RCS1044";
-        public const string RenamePrivateFieldAccordingToCamelCaseWithUnderscore = "RCS1045";
+        public const string RenamePrivateFieldToCamelCaseWithUnderscore = "RCS1045";
         public const string AsynchronousMethodNameShouldEndWithAsync = "RCS1046";
         public const string NonAsynchronousMethodNameShouldNotEndWithAsync = "RCS1047";
         public const string UseLambdaExpressionInsteadOfAnonymousMethod = "RCS1048";
@@ -118,7 +118,6 @@ namespace Roslynator.CSharp
         public const string AddParenthesesAccordingToOperatorPrecedence = "RCS1123";
         public const string InlineLocalVariable = "RCS1124";
         public const string AddBracesToIfElse = "RCS1126";
-        public const string MergeLocalDeclarationWithAssignment = "RCS1127";
         public const string UseCoalesceExpression = "RCS1128";
         public const string RemoveRedundantFieldInitialization = "RCS1129";
         public const string BitwiseOperationOnEnumWithoutFlagsAttribute = "RCS1130";
