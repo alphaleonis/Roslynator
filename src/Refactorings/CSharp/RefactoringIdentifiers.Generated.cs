@@ -54,10 +54,12 @@ namespace Roslynator.CSharp.Refactorings
         public const string ConvertInterpolatedStringToConcatenation = Prefix + "0193";
         public const string ConvertInterpolatedStringToStringFormat = Prefix + "0201";
         public const string ConvertInterpolatedStringToStringLiteral = Prefix + "0136";
+        public const string ConvertNullLiteralToDefaultExpression = Prefix + "0139";
         public const string ConvertRegularStringLiteralToVerbatimStringLiteral = Prefix + "0142";
         public const string ConvertReturnToIf = Prefix + "0143";
         public const string ConvertStatementsToIfElse = Prefix + "0211";
         public const string ConvertStringFormatToInterpolatedString = Prefix + "0145";
+        public const string ConvertSwitchExpressionToSwitchStatement = Prefix + "0214";
         public const string ConvertSwitchToIf = Prefix + "0147";
         public const string ConvertVerbatimStringLiteralToRegularStringLiteral = Prefix + "0148";
         public const string ConvertVerbatimStringLiteralToRegularStringLiterals = Prefix + "0149";
@@ -174,7 +176,6 @@ namespace Roslynator.CSharp.Refactorings
         public const string ReplaceInterpolatedStringWithInterpolationExpression = Prefix + "0135";
         public const string ReplaceMethodGroupWithLambda = Prefix + "0137";
         public const string ReplaceMethodWithProperty = Prefix + "0138";
-        public const string ReplaceNullLiteralExpressionWithDefaultExpression = Prefix + "0139";
         public const string ReplaceObjectCreationWithDefaultValue = Prefix + "0185";
         public const string ReplacePrefixOperatorWithPostfixOperator = Prefix + "0140";
         public const string ReplacePropertyWithMethod = Prefix + "0141";

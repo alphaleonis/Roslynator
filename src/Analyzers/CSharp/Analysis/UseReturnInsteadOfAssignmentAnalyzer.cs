@@ -22,7 +22,6 @@ namespace Roslynator.CSharp.Analysis
         public override void Initialize(AnalysisContext context)
         {
             base.Initialize(context);
-            context.EnableConcurrentExecution();
 
             context.RegisterSyntaxNodeAction(AnalyzeIfStatement, SyntaxKind.IfStatement);
             context.RegisterSyntaxNodeAction(AnalyzeSwitchStatement, SyntaxKind.SwitchStatement);
@@ -203,7 +202,7 @@ namespace Roslynator.CSharp.Analysis
             SimpleAssignmentStatementInfo assignmentInfo = SyntaxInfo.SimpleAssignmentStatementInfo(statement);
 
             return assignmentInfo.Success
-                && semanticModel.GetSymbol(assignmentInfo.Left, cancellationToken)?.Equals(symbol) == true;
+                && SymbolEqualityComparer.Default.Equals(semanticModel.GetSymbol(assignmentInfo.Left, cancellationToken), symbol);
         }
     }
 }
