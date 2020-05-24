@@ -1228,7 +1228,7 @@ public class Bar
       </Sample>
     </Samples>
   </Analyzer>
-  <Analyzer Identifier="AvoidInterpolatedStringWithNoInterpolation">
+  <Analyzer Identifier="AvoidInterpolatedStringWithNoInterpolation" IsObsolete="true">
     <Id>RCS1062</Id>
     <Title>Avoid interpolated string with no interpolation.</Title>
     <MessageFormat>Remove '$' from interpolated string with no interpolation.</MessageFormat>
@@ -2366,9 +2366,9 @@ string s2 = s + "b";]]></After>
     <DefaultSeverity>Hidden</DefaultSeverity>
     <IsEnabledByDefault>false</IsEnabledByDefault>
   </Analyzer>
-  <Analyzer Identifier="AddParenthesesAccordingToOperatorPrecedence">
+  <Analyzer Identifier="AddParenthesesWhenNecessary">
     <Id>RCS1123</Id>
-    <Title>Add parentheses according to operator precedence.</Title>
+    <Title>Add parentheses when necessary.</Title>
     <Category>Readability</Category>
     <DefaultSeverity>Info</DefaultSeverity>
     <IsEnabledByDefault>true</IsEnabledByDefault>
@@ -2380,6 +2380,10 @@ string s2 = s + "b";]]></After>
         <After><![CDATA[if (x || (y && z))
 {
 }]]></After>
+      </Sample>
+      <Sample>
+        <Before><![CDATA[x?.y!.z]]></Before>
+        <After><![CDATA[(x?.y)!.z]]></After>
       </Sample>
     </Samples>
   </Analyzer>
@@ -3661,23 +3665,23 @@ public enum Foo
       </Sample>
     </Samples>
   </Analyzer>
-  <Analyzer Identifier="UseRegularStringLiteralInsteadOfVerbatimStringLiteral">
+  <Analyzer Identifier="UnnecessaryUsageOfVerbatimStringLiteral">
     <Id>RCS1192</Id>
-    <Title>Use regular string literal instead of verbatim string literal.</Title>
+    <Title>Unnecessary usage of verbatim string literal.</Title>
     <Category>Readability</Category>
     <DefaultSeverity>Info</DefaultSeverity>
     <IsEnabledByDefault>true</IsEnabledByDefault>
     <SupportsFadeOut>true</SupportsFadeOut>
     <Samples>
       <Sample>
-        <Before><![CDATA[string s = @"x";]]></Before>
-        <After><![CDATA[string s = "x";]]></After>
+        <Before><![CDATA[string s = @"textWithoutEscapeSequence";]]></Before>
+        <After><![CDATA[string s = "textWithoutEscapeSequence";]]></After>
       </Sample>
     </Samples>
   </Analyzer>
-  <Analyzer Identifier="OverridingMemberCannotChangeParamsModifier">
+  <Analyzer Identifier="OverridingMemberShouldNotChangeParamsModifier">
     <Id>RCS1193</Id>
-    <Title>Overriding member cannot change 'params' modifier.</Title>
+    <Title>Overriding member should not change 'params' modifier.</Title>
     <Category>Design</Category>
     <DefaultSeverity>Warning</DefaultSeverity>
     <IsEnabledByDefault>true</IsEnabledByDefault>
@@ -3948,9 +3952,9 @@ int i = (x != null) ? x.Value.GetHashCode() : 0; // [|Id|]]]></Before>
       </Sample>
     </Samples>
   </Analyzer>
-  <Analyzer Identifier="UseMethodGroupInsteadOfAnonymousFunction">
+  <Analyzer Identifier="ConvertAnonymousFunctionToMethodGroup">
     <Id>RCS1207</Id>
-    <Title>Use method group instead of anonymous function.</Title>
+    <Title>Convert anonymous function to method group.</Title>
     <Category>Simplification</Category>
     <DefaultSeverity>Hidden</DefaultSeverity>
     <IsEnabledByDefault>true</IsEnabledByDefault>
@@ -4141,8 +4145,12 @@ x = "";]]></Before>
     <SupportsFadeOutAnalyzer>true</SupportsFadeOutAnalyzer>
     <Samples>
       <Sample>
-        <Before><![CDATA[$"{y}"]]></Before>
-        <After><![CDATA[y]]></After>
+        <Before><![CDATA[string s = $"abc";]]></Before>
+        <After><![CDATA[string s = "abc";]]></After>
+      </Sample>
+      <Sample>
+        <Before><![CDATA[$"{x}"]]></Before>
+        <After><![CDATA[x]]></After>
       </Sample>
     </Samples>
   </Analyzer>
@@ -4589,9 +4597,9 @@ public string Foo()
       </Link>
     </Links>
   </Analyzer>
-  <Analyzer Identifier="UnnecessaryUsageOfEnumerator">
+  <Analyzer Identifier="UnnecessaryExplicitUseOfEnumerator">
     <Id>RCS1230</Id>
-    <Title>Unnecessary usage of enumerator.</Title>
+    <Title>Unnecessary explicit use of enumerator.</Title>
     <Category>Readability</Category>
     <DefaultSeverity>Info</DefaultSeverity>
     <IsEnabledByDefault>true</IsEnabledByDefault>

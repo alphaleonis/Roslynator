@@ -721,18 +721,6 @@ namespace Roslynator.CSharp
 
         public static readonly DiagnosticDescriptor MergeIfWithNestedIfFadeOut = DiagnosticDescriptorFactory.CreateFadeOut(MergeIfWithNestedIf);
 
-        /// <summary>RCS1062</summary>
-        public static readonly DiagnosticDescriptor AvoidInterpolatedStringWithNoInterpolation = Factory.Create(
-            id:                 DiagnosticIdentifiers.AvoidInterpolatedStringWithNoInterpolation, 
-            title:              "Avoid interpolated string with no interpolation.", 
-            messageFormat:      "Remove '$' from interpolated string with no interpolation.", 
-            category:           DiagnosticCategories.Redundancy, 
-            defaultSeverity:    DiagnosticSeverity.Hidden, 
-            isEnabledByDefault: true, 
-            description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.AvoidInterpolatedStringWithNoInterpolation, 
-            customTags:         WellKnownDiagnosticTags.Unnecessary);
-
         /// <summary>RCS1063</summary>
         public static readonly DiagnosticDescriptor AvoidUsageOfDoStatementToCreateInfiniteLoop = Factory.Create(
             id:                 DiagnosticIdentifiers.AvoidUsageOfDoStatementToCreateInfiniteLoop, 
@@ -1336,15 +1324,15 @@ namespace Roslynator.CSharp
             customTags:         Array.Empty<string>());
 
         /// <summary>RCS1123</summary>
-        public static readonly DiagnosticDescriptor AddParenthesesAccordingToOperatorPrecedence = Factory.Create(
-            id:                 DiagnosticIdentifiers.AddParenthesesAccordingToOperatorPrecedence, 
-            title:              "Add parentheses according to operator precedence.", 
-            messageFormat:      "Add parentheses according to operator precedence.", 
+        public static readonly DiagnosticDescriptor AddParenthesesWhenNecessary = Factory.Create(
+            id:                 DiagnosticIdentifiers.AddParenthesesWhenNecessary, 
+            title:              "Add parentheses when necessary.", 
+            messageFormat:      "Add parentheses when necessary.", 
             category:           DiagnosticCategories.Readability, 
             defaultSeverity:    DiagnosticSeverity.Info, 
             isEnabledByDefault: true, 
             description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.AddParenthesesAccordingToOperatorPrecedence, 
+            helpLinkUri:        DiagnosticIdentifiers.AddParenthesesWhenNecessary, 
             customTags:         Array.Empty<string>());
 
         /// <summary>RCS1124</summary>
@@ -2024,27 +2012,27 @@ namespace Roslynator.CSharp
             customTags:         Array.Empty<string>());
 
         /// <summary>RCS1192</summary>
-        public static readonly DiagnosticDescriptor UseRegularStringLiteralInsteadOfVerbatimStringLiteral = Factory.Create(
-            id:                 DiagnosticIdentifiers.UseRegularStringLiteralInsteadOfVerbatimStringLiteral, 
-            title:              "Use regular string literal instead of verbatim string literal.", 
-            messageFormat:      "Use regular string literal instead of verbatim string literal.", 
+        public static readonly DiagnosticDescriptor UnnecessaryUsageOfVerbatimStringLiteral = Factory.Create(
+            id:                 DiagnosticIdentifiers.UnnecessaryUsageOfVerbatimStringLiteral, 
+            title:              "Unnecessary usage of verbatim string literal.", 
+            messageFormat:      "Unnecessary usage of verbatim string literal.", 
             category:           DiagnosticCategories.Readability, 
             defaultSeverity:    DiagnosticSeverity.Info, 
             isEnabledByDefault: true, 
             description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.UseRegularStringLiteralInsteadOfVerbatimStringLiteral, 
+            helpLinkUri:        DiagnosticIdentifiers.UnnecessaryUsageOfVerbatimStringLiteral, 
             customTags:         WellKnownDiagnosticTags.Unnecessary);
 
         /// <summary>RCS1193</summary>
-        public static readonly DiagnosticDescriptor OverridingMemberCannotChangeParamsModifier = Factory.Create(
-            id:                 DiagnosticIdentifiers.OverridingMemberCannotChangeParamsModifier, 
-            title:              "Overriding member cannot change 'params' modifier.", 
-            messageFormat:      "Overriding member cannot change 'params' modifier.", 
+        public static readonly DiagnosticDescriptor OverridingMemberShouldNotChangeParamsModifier = Factory.Create(
+            id:                 DiagnosticIdentifiers.OverridingMemberShouldNotChangeParamsModifier, 
+            title:              "Overriding member should not change 'params' modifier.", 
+            messageFormat:      "Overriding member should not change 'params' modifier.", 
             category:           DiagnosticCategories.Design, 
             defaultSeverity:    DiagnosticSeverity.Warning, 
             isEnabledByDefault: true, 
             description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.OverridingMemberCannotChangeParamsModifier, 
+            helpLinkUri:        DiagnosticIdentifiers.OverridingMemberShouldNotChangeParamsModifier, 
             customTags:         Array.Empty<string>());
 
         /// <summary>RCS1194</summary>
@@ -2204,18 +2192,18 @@ namespace Roslynator.CSharp
             customTags:         Array.Empty<string>());
 
         /// <summary>RCS1207</summary>
-        public static readonly DiagnosticDescriptor UseMethodGroupInsteadOfAnonymousFunction = Factory.Create(
-            id:                 DiagnosticIdentifiers.UseMethodGroupInsteadOfAnonymousFunction, 
-            title:              "Use method group instead of anonymous function.", 
-            messageFormat:      "Use method group instead of anonymous function.", 
+        public static readonly DiagnosticDescriptor ConvertAnonymousFunctionToMethodGroup = Factory.Create(
+            id:                 DiagnosticIdentifiers.ConvertAnonymousFunctionToMethodGroup, 
+            title:              "Convert anonymous function to method group.", 
+            messageFormat:      "Convert anonymous function to method group.", 
             category:           DiagnosticCategories.Simplification, 
             defaultSeverity:    DiagnosticSeverity.Hidden, 
             isEnabledByDefault: true, 
             description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.UseMethodGroupInsteadOfAnonymousFunction, 
+            helpLinkUri:        DiagnosticIdentifiers.ConvertAnonymousFunctionToMethodGroup, 
             customTags:         Array.Empty<string>());
 
-        public static readonly DiagnosticDescriptor UseMethodGroupInsteadOfAnonymousFunctionFadeOut = DiagnosticDescriptorFactory.CreateFadeOut(UseMethodGroupInsteadOfAnonymousFunction);
+        public static readonly DiagnosticDescriptor ConvertAnonymousFunctionToMethodGroupFadeOut = DiagnosticDescriptorFactory.CreateFadeOut(ConvertAnonymousFunctionToMethodGroup);
 
         /// <summary>RCS1208</summary>
         public static readonly DiagnosticDescriptor ReduceIfNesting = Factory.Create(
@@ -2490,15 +2478,15 @@ namespace Roslynator.CSharp
             customTags:         Array.Empty<string>());
 
         /// <summary>RCS1230</summary>
-        public static readonly DiagnosticDescriptor UnnecessaryUsageOfEnumerator = Factory.Create(
-            id:                 DiagnosticIdentifiers.UnnecessaryUsageOfEnumerator, 
-            title:              "Unnecessary usage of enumerator.", 
-            messageFormat:      "Unnecessary usage of enumerator.", 
+        public static readonly DiagnosticDescriptor UnnecessaryExplicitUseOfEnumerator = Factory.Create(
+            id:                 DiagnosticIdentifiers.UnnecessaryExplicitUseOfEnumerator, 
+            title:              "Unnecessary explicit use of enumerator.", 
+            messageFormat:      "Unnecessary explicit use of enumerator.", 
             category:           DiagnosticCategories.Readability, 
             defaultSeverity:    DiagnosticSeverity.Info, 
             isEnabledByDefault: true, 
             description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.UnnecessaryUsageOfEnumerator, 
+            helpLinkUri:        DiagnosticIdentifiers.UnnecessaryExplicitUseOfEnumerator, 
             customTags:         Array.Empty<string>());
 
         /// <summary>RCS1231</summary>

@@ -65,7 +65,6 @@ namespace Roslynator.CSharp
         public const string AvoidLockingOnPubliclyAccessibleInstance = "RCS1059";
         public const string DeclareEachTypeInSeparateFile = "RCS1060";
         public const string MergeIfWithNestedIf = "RCS1061";
-        public const string AvoidInterpolatedStringWithNoInterpolation = "RCS1062";
         public const string AvoidUsageOfDoStatementToCreateInfiniteLoop = "RCS1063";
         public const string AvoidUsageOfForStatementToCreateInfiniteLoop = "RCS1064";
         public const string AvoidUsageOfWhileStatementToCreateInfiniteLoop = "RCS1065";
@@ -115,7 +114,7 @@ namespace Roslynator.CSharp
         public const string UseStringIsNullOrEmptyMethod = "RCS1113";
         public const string RemoveRedundantDelegateCreation = "RCS1114";
         public const string MarkLocalVariableAsConst = "RCS1118";
-        public const string AddParenthesesAccordingToOperatorPrecedence = "RCS1123";
+        public const string AddParenthesesWhenNecessary = "RCS1123";
         public const string InlineLocalVariable = "RCS1124";
         public const string AddBracesToIfElse = "RCS1126";
         public const string UseCoalesceExpression = "RCS1128";
@@ -172,8 +171,8 @@ namespace Roslynator.CSharp
         public const string AddOrRemoveRegionName = "RCS1189";
         public const string JoinStringExpressions = "RCS1190";
         public const string DeclareEnumValueAsCombinationOfNames = "RCS1191";
-        public const string UseRegularStringLiteralInsteadOfVerbatimStringLiteral = "RCS1192";
-        public const string OverridingMemberCannotChangeParamsModifier = "RCS1193";
+        public const string UnnecessaryUsageOfVerbatimStringLiteral = "RCS1192";
+        public const string OverridingMemberShouldNotChangeParamsModifier = "RCS1193";
         public const string ImplementExceptionConstructors = "RCS1194";
         public const string UseExclusiveOrOperator = "RCS1195";
         public const string CallExtensionMethodAsInstanceMethod = "RCS1196";
@@ -187,7 +186,7 @@ namespace Roslynator.CSharp
         public const string UseEventArgsEmpty = "RCS1204";
         public const string OrderNamedArguments = "RCS1205";
         public const string UseConditionalAccessInsteadOfConditionalExpression = "RCS1206";
-        public const string UseMethodGroupInsteadOfAnonymousFunction = "RCS1207";
+        public const string ConvertAnonymousFunctionToMethodGroup = "RCS1207";
         public const string ReduceIfNesting = "RCS1208";
         public const string OrderTypeParameterConstraints = "RCS1209";
         public const string ReturnTaskInsteadOfNull = "RCS1210";
@@ -210,7 +209,7 @@ namespace Roslynator.CSharp
         public const string ValidateArgumentsCorrectly = "RCS1227";
         public const string UnusedElementInDocumentationComment = "RCS1228";
         public const string UseAsyncAwait = "RCS1229";
-        public const string UnnecessaryUsageOfEnumerator = "RCS1230";
+        public const string UnnecessaryExplicitUseOfEnumerator = "RCS1230";
         public const string MakeParameterRefReadOnly = "RCS1231";
         public const string OrderElementsInDocumentationComment = "RCS1232";
         public const string UseShortCircuitingOperator = "RCS1233";
