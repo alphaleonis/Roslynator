@@ -163,6 +163,18 @@ namespace Roslynator.CSharp
             customTags:         Array.Empty<string>());
 
         [Obsolete("", error: true)]
+        internal static readonly DiagnosticDescriptor AvoidInterpolatedStringWithNoInterpolation = Factory.Create(
+            id:                 DiagnosticIdentifiers.AvoidInterpolatedStringWithNoInterpolation, 
+            title:              "Avoid interpolated string with no interpolation.", 
+            messageFormat:      "Remove '$' from interpolated string with no interpolation.", 
+            category:           DiagnosticCategories.Redundancy, 
+            defaultSeverity:    DiagnosticSeverity.Hidden, 
+            isEnabledByDefault: true, 
+            description:        null, 
+            helpLinkUri:        DiagnosticIdentifiers.AvoidInterpolatedStringWithNoInterpolation, 
+            customTags:         WellKnownDiagnosticTags.Unnecessary);
+
+        [Obsolete("", error: true)]
         internal static readonly DiagnosticDescriptor FormatDeclarationBraces = Factory.Create(
             id:                 DiagnosticIdentifiers.FormatDeclarationBraces, 
             title:              "Format declaration braces.", 

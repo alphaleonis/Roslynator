@@ -33,6 +33,8 @@ namespace Roslynator.CSharp
         [Obsolete("", error: true)]
         public const string AddEmptyLineBetweenDeclarations = "RCS1057";
         [Obsolete("", error: true)]
+        public const string AvoidInterpolatedStringWithNoInterpolation = "RCS1062";
+        [Obsolete("", error: true)]
         public const string FormatDeclarationBraces = "RCS1076";
         [Obsolete("", error: true)]
         public const string UseCountOrLengthPropertyInsteadOfCountMethod = "RCS1082";
