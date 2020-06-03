@@ -417,11 +417,9 @@ namespace Roslynator.CommandLine
                     if (analyzers?.IsEmpty == true)
                         analyzers.Remove();
 
-                    if (analyzers != null)
-                        analyzers.ReplaceNodes(analyzers.Elements().OrderBy(f => f.Attribute("Id")?.Value));
+                    analyzers?.ReplaceNodes(analyzers.Elements().OrderBy(f => f.Attribute("Id")?.Value));
 
-                    if (formattingAnalyzers != null)
-                        formattingAnalyzers.ReplaceNodes(formattingAnalyzers.Elements().OrderBy(f => f.Attribute("Id")?.Value));
+                    formattingAnalyzers?.ReplaceNodes(formattingAnalyzers.Elements().OrderBy(f => f.Attribute("Id")?.Value));
 
                     var settings = new XmlWriterSettings() { OmitXmlDeclaration = false, Indent = true };
 
