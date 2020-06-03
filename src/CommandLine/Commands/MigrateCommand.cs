@@ -352,7 +352,12 @@ namespace Roslynator.CommandLine
 
             var ids = new Dictionary<string, XElement>();
 
-            foreach (XElement element in document.Root.Elements("Rules").Elements("Rule"))
+            IEnumerable<XElement> rules = document.Root.Elements("Rules");
+
+            if (!rules.Any())
+                return CommandResult.None;
+
+            foreach (XElement element in rules.Elements("Rule"))
             {
                 string id = element.Attribute("Id")?.Value;
 
@@ -360,12 +365,9 @@ namespace Roslynator.CommandLine
                     ids[id] = element;
             }
 
-            XElement analyzers = document.Root.Elements("Rules").LastOrDefault(f => f.Attribute("AnalyzerId")?.Value == "Roslynator.CSharp.Analyzers");
+            XElement analyzers = rules.LastOrDefault(f => f.Attribute("AnalyzerId")?.Value == "Roslynator.CSharp.Analyzers");
 
-            if (analyzers == null)
-                return CommandResult.None;
-
-            XElement formattingAnalyzers = document.Root.Elements("Rules").FirstOrDefault(f => f.Attribute("AnalyzerId")?.Value == "Roslynator.Formatting.Analyzers");
+            XElement formattingAnalyzers = rules.FirstOrDefault(f => f.Attribute("AnalyzerId")?.Value == "Roslynator.Formatting.Analyzers");
 
             if (formattingAnalyzers == null)
             {
@@ -374,7 +376,7 @@ namespace Roslynator.CommandLine
                     new XAttribute("AnalyzerId", "Roslynator.Formatting.Analyzers"),
                     new XAttribute("RuleNamespace", "Roslynator.Formatting.Analyzers"));
 
-                analyzers.AddAfterSelf(formattingAnalyzers);
+                (analyzers ?? rules.Last()).AddAfterSelf(formattingAnalyzers);
             }
 
             List<LogMessage> messages = null;
@@ -412,8 +414,14 @@ namespace Roslynator.CommandLine
 
                 if (!DryRun)
                 {
-                    if (analyzers.IsEmpty)
+                    if (analyzers?.IsEmpty == true)
                         analyzers.Remove();
+
+                    if (analyzers != null)
+                        analyzers.ReplaceNodes(analyzers.Elements().OrderBy(f => f.Attribute("Id")?.Value));
+
+                    if (formattingAnalyzers != null)
+                        formattingAnalyzers.ReplaceNodes(formattingAnalyzers.Elements().OrderBy(f => f.Attribute("Id")?.Value));
 
                     var settings = new XmlWriterSettings() { OmitXmlDeclaration = false, Indent = true };
 
