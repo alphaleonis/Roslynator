@@ -31,7 +31,6 @@ namespace Roslynator.CSharp.CodeFixes
                     DiagnosticIdentifiers.UseCoalesceExpressionInsteadOfConditionalExpression,
                     DiagnosticIdentifiers.SimplifyConditionalExpression,
                     DiagnosticIdentifiers.SimplifyConditionalExpression2,
-                    DiagnosticIdentifiers.FormatConditionalExpression,
                     DiagnosticIdentifiers.UseConditionalAccessInsteadOfConditionalExpression,
                     DiagnosticIdentifiers.AvoidNestedConditionalOperators);
             }
@@ -72,22 +71,6 @@ namespace Roslynator.CSharp.CodeFixes
                             CodeAction codeAction = CodeAction.Create(
                                 "Simplify conditional expression",
                                 ct => SimplifyConditionalExpressionAsync(document, conditionalExpression, ct),
-                                GetEquivalenceKey(diagnostic));
-
-                            context.RegisterCodeFix(codeAction, diagnostic);
-                            break;
-                        }
-                    case DiagnosticIdentifiers.FormatConditionalExpression:
-                        {
-                            CodeAction codeAction = CodeAction.Create(
-                                "Format ? and : on next line",
-                                cancellationToken =>
-                                {
-                                    return FormatConditionalExpressionRefactoring.RefactorAsync(
-                                        document,
-                                        conditionalExpression,
-                                        cancellationToken);
-                                },
                                 GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
