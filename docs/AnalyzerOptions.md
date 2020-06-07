@@ -7,6 +7,7 @@ Each analyzer option is represented by an "analyzer" that is is not real analyze
 Analyzer option has following properties:
 
 * It has ID that is derived from its parent analyzer (RCS0000 can have option RCS0000a, RCS0000b etc.).
+  * Analyzer option that invert behavior of its parent analyzer has predefined suffix 'i'.
 * It is displayed in section "Options" in documentation of its parent analyzer.
 * It requires its parent analyzer to be enabled.
 * It is never reported as a diagnostic.
@@ -44,5 +45,4 @@ This option is combination of "Enable" and "Disable" option. Example is [RCS1051
 
 ### "Invert" Option
 
-This option inverts behavior of its parent analyzer. For example instead of adding some kind of a syntax
-it will suggest to remove the syntax.
+This option inverts behavior of its parent analyzer.

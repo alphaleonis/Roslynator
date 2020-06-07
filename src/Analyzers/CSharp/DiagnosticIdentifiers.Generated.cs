@@ -49,7 +49,8 @@ namespace Roslynator.CSharp
         public const string NonAsynchronousMethodNameShouldNotEndWithAsync = "RCS1047";
         public const string UseLambdaExpressionInsteadOfAnonymousMethod = "RCS1048";
         public const string SimplifyBooleanComparison = "RCS1049";
-        public const string AddArgumentListToObjectCreation = "RCS1050";
+        public const string AddArgumentListToObjectCreationOrViceVersa = "RCS1050";
+        public const string RemoveArgumentListFromObjectCreation = "RCS1050i";
         public const string ParenthesizeConditionOfConditionalExpression = "RCS1051";
         public const string RemoveParenthesesFromConditionOfConditionalExpressionWhenExpressionIsSingleToken = "RCS1051a";
         public const string DeclareEachAttributeSeparately = "RCS1052";
@@ -63,7 +64,6 @@ namespace Roslynator.CSharp
         public const string AvoidUsageOfForStatementToCreateInfiniteLoop = "RCS1064";
         public const string AvoidUsageOfWhileStatementToCreateInfiniteLoop = "RCS1065";
         public const string RemoveEmptyFinallyClause = "RCS1066";
-        public const string RemoveArgumentListFromObjectCreation = "RCS1067";
         public const string SimplifyLogicalNegation = "RCS1068";
         public const string RemoveUnnecessaryCaseLabel = "RCS1069";
         public const string RemoveRedundantDefaultSwitchSection = "RCS1070";
@@ -84,7 +84,8 @@ namespace Roslynator.CSharp
         public const string RemoveEmptyRegion = "RCS1091";
         public const string RemoveFileWithNoCode = "RCS1093";
         public const string DeclareUsingDirectiveOnTopLevel = "RCS1094";
-        public const string UseBitwiseOperationInsteadOfCallingHasFlag = "RCS1096";
+        public const string ConvertHasFlagCallToBitwiseOperationOrViceVersa = "RCS1096";
+        public const string ConvertBitwiseOperationToHasFlagCall = "RCS1096i";
         public const string RemoveRedundantToStringCall = "RCS1097";
         public const string AvoidNullLiteralExpressionOnLeftSideOfBinaryExpression = "RCS1098";
         public const string DefaultLabelShouldBeLastLabelInSwitchSection = "RCS1099";
@@ -93,6 +94,7 @@ namespace Roslynator.CSharp
         public const string MakeClassStatic = "RCS1102";
         public const string ConvertIfToAssignment = "RCS1103";
         public const string SimplifyConditionalExpression = "RCS1104";
+        public const string SimplifyConditionalExpressionWhenItIncludesNegationOfCondition = "RCS1104a";
         public const string UnnecessaryInterpolation = "RCS1105";
         public const string RemoveEmptyDestructor = "RCS1106";
         public const string RemoveRedundantStringToCharArrayCall = "RCS1107";
@@ -209,7 +211,6 @@ namespace Roslynator.CSharp
         public const string DoNotPassNonReadOnlyStructByReadOnlyReference = "RCS1242";
         public const string DuplicateWordInComment = "RCS1243";
         public const string SimplifyDefaultExpression = "RCS1244";
-        public const string SimplifyConditionalExpression2 = "RCS1245";
         public const string UseElementAccess = "RCS1246";
         public const string DoNotUseElementAccessWhenExpressionIsInvocation = "RCS1246a";
     }

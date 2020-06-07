@@ -1012,18 +1012,33 @@ if (!f)
       </Sample>
     </Samples>
   </Analyzer>
-  <Analyzer Identifier="AddArgumentListToObjectCreation">
+  <Analyzer Identifier="AddArgumentListToObjectCreationOrViceVersa">
     <Id>RCS1050</Id>
-    <Title>Add argument list to object creation expression.</Title>
+    <Title>Add argument list to object creation expression (or vice versa).</Title>
+    <MessageFormat>Add argument list to object creation expression.</MessageFormat>
     <Category>Style</Category>
     <DefaultSeverity>Info</DefaultSeverity>
     <IsEnabledByDefault>false</IsEnabledByDefault>
+    <SupportsFadeOut>true</SupportsFadeOut>
     <Samples>
       <Sample>
         <Before><![CDATA[var items = new List<string> { "a", "b", "c"  };]]></Before>
         <After><![CDATA[var items = new List<string>() { "a", "b", "c"  };]]></After>
       </Sample>
     </Samples>
+    <Options>
+      <Option Identifier="RemoveArgumentListFromObjectCreation">
+        <Title>Remove argument list from object creation expression.</Title>
+        <Id>i</Id>
+        <Kind>Invert</Kind>
+        <Samples>
+          <Sample>
+            <Before><![CDATA[var items = new List<string>() { "a", "b", "c" };]]></Before>
+            <After><![CDATA[var items = new List<string> { "a", "b", "c" };]]></After>
+          </Sample>
+        </Samples>
+      </Option>
+    </Options>
   </Analyzer>
   <Analyzer Identifier="ParenthesizeConditionOfConditionalExpression">
     <Id>RCS1051</Id>
@@ -1400,7 +1415,7 @@ catch (Exception ex)
       </Sample>
     </Samples>
   </Analyzer>
-  <Analyzer Identifier="RemoveArgumentListFromObjectCreation">
+  <Analyzer Identifier="RemoveArgumentListFromObjectCreation2" IsObsolete="true">
     <Id>RCS1067</Id>
     <Title>Remove argument list from object creation expression.</Title>
     <Category>Style</Category>
@@ -1957,22 +1972,38 @@ namespace Foo
     <DefaultSeverity>Info</DefaultSeverity>
     <IsEnabledByDefault>true</IsEnabledByDefault>
   </Analyzer>
-  <Analyzer Identifier="UseBitwiseOperationInsteadOfCallingHasFlag">
+  <Analyzer Identifier="ConvertHasFlagCallToBitwiseOperationOrViceVersa">
     <Id>RCS1096</Id>
-    <Title>Use bitwise operation instead of calling 'HasFlag'.</Title>
+    <Title>Convert 'HasFlag' call to bitwise operation (or vice versa).</Title>
+    <MessageFormat>Convert 'HasFlag' call to bitwise operation.</MessageFormat>
     <Category>Performance</Category>
     <DefaultSeverity>Info</DefaultSeverity>
     <IsEnabledByDefault>true</IsEnabledByDefault>
     <Samples>
       <Sample>
-        <Before><![CDATA[if (options.HasFlag(RegexOptions.IgnoreCase)) // [|Id|]
-{
-}]]></Before>
-        <After><![CDATA[if ((options & RegexOptions.IgnoreCase) != 0)
-{
-}]]></After>
+        <Before><![CDATA[options.HasFlag(RegexOptions.IgnoreCase)]]></Before>
+        <After><![CDATA[(options & RegexOptions.IgnoreCase) != 0]]></After>
       </Sample>
     </Samples>
+    <Options>
+      <Option Identifier="ConvertBitwiseOperationToHasFlagCall">
+        <Title>Convert bitwise operation to 'HasFlag' call.</Title>
+        <Id>i</Id>
+        <Kind>Invert</Kind>
+        <Samples>
+          <Sample>
+            <Before><![CDATA[(options & RegexOptions.IgnoreCase) != 0]]></Before>
+            <After><![CDATA[options.HasFlag(RegexOptions.IgnoreCase)]]></After>
+          </Sample>
+        </Samples>
+        <Links>
+          <Link>
+            <Url>https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-core-2-1/</Url>
+            <Text>Performance Improvements in .NET Core 2.1</Text>
+          </Link>
+        </Links>
+      </Option>
+    </Options>
   </Analyzer>
   <Analyzer Identifier="RemoveRedundantToStringCall">
     <Id>RCS1097</Id>
@@ -2160,6 +2191,23 @@ else
         <After><![CDATA[bool x = y || z;]]></After>
       </Sample>
     </Samples>
+    <Options>
+      <Option Identifier="SimplifyConditionalExpressionWhenItIncludesNegationOfCondition">
+        <Title>Simplify conditional expression (when it includes negation of condition).</Title>
+        <Id>a</Id>
+        <Kind>Enable</Kind>
+        <Samples>
+          <Sample>
+            <Before><![CDATA[bool x = y ? false : z;]]></Before>
+            <After><![CDATA[bool x = !y && z;]]></After>
+          </Sample>
+          <Sample>
+            <Before><![CDATA[bool x = y ? z : true;]]></Before>
+            <After><![CDATA[bool x = !y || z;]]></After>
+          </Sample>
+        </Samples>
+      </Option>
+    </Options>
   </Analyzer>
   <Analyzer Identifier="UnnecessaryInterpolation">
     <Id>RCS1105</Id>
@@ -5188,7 +5236,7 @@ public class C
       </Sample>
     </Samples>
   </Analyzer>
-  <Analyzer Identifier="SimplifyConditionalExpression2">
+  <Analyzer Identifier="SimplifyConditionalExpression2" IsObsolete="true">
     <Id>RCS1245</Id>
     <Title>Simplify conditional expression.</Title>
     <Category>Simplification</Category>

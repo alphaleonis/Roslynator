@@ -526,15 +526,27 @@ namespace Roslynator.CSharp
         public static readonly DiagnosticDescriptor SimplifyBooleanComparisonFadeOut = DiagnosticDescriptorFactory.CreateFadeOut(SimplifyBooleanComparison);
 
         /// <summary>RCS1050</summary>
-        public static readonly DiagnosticDescriptor AddArgumentListToObjectCreation = Factory.Create(
-            id:                 DiagnosticIdentifiers.AddArgumentListToObjectCreation, 
-            title:              "Add argument list to object creation expression.", 
+        public static readonly DiagnosticDescriptor AddArgumentListToObjectCreationOrViceVersa = Factory.Create(
+            id:                 DiagnosticIdentifiers.AddArgumentListToObjectCreationOrViceVersa, 
+            title:              "Add argument list to object creation expression (or vice versa).", 
             messageFormat:      "Add argument list to object creation expression.", 
             category:           DiagnosticCategories.Style, 
             defaultSeverity:    DiagnosticSeverity.Info, 
             isEnabledByDefault: false, 
             description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.AddArgumentListToObjectCreation, 
+            helpLinkUri:        DiagnosticIdentifiers.AddArgumentListToObjectCreationOrViceVersa, 
+            customTags:         WellKnownDiagnosticTags.Unnecessary);
+
+        /// <summary>RCS1050i</summary>
+        public static readonly DiagnosticDescriptor RemoveArgumentListFromObjectCreation = Factory.Create(
+            id:                 DiagnosticIdentifiers.RemoveArgumentListFromObjectCreation, 
+            title:              "Remove argument list from object creation expression.", 
+            messageFormat:      "Remove argument list from object creation expression.", 
+            category:           DiagnosticCategories.AnalyzerOption, 
+            defaultSeverity:    DiagnosticSeverity.Info, 
+            isEnabledByDefault: false, 
+            description:        null, 
+            helpLinkUri:        DiagnosticIdentifiers.RemoveArgumentListFromObjectCreation, 
             customTags:         Array.Empty<string>());
 
         /// <summary>RCS1051</summary>
@@ -698,18 +710,6 @@ namespace Roslynator.CSharp
             customTags:         WellKnownDiagnosticTags.Unnecessary);
 
         public static readonly DiagnosticDescriptor RemoveEmptyFinallyClauseFadeOut = DiagnosticDescriptorFactory.CreateFadeOut(RemoveEmptyFinallyClause);
-
-        /// <summary>RCS1067</summary>
-        public static readonly DiagnosticDescriptor RemoveArgumentListFromObjectCreation = Factory.Create(
-            id:                 DiagnosticIdentifiers.RemoveArgumentListFromObjectCreation, 
-            title:              "Remove argument list from object creation expression.", 
-            messageFormat:      "Remove argument list from object creation expression.", 
-            category:           DiagnosticCategories.Style, 
-            defaultSeverity:    DiagnosticSeverity.Info, 
-            isEnabledByDefault: false, 
-            description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.RemoveArgumentListFromObjectCreation, 
-            customTags:         WellKnownDiagnosticTags.Unnecessary);
 
         /// <summary>RCS1068</summary>
         public static readonly DiagnosticDescriptor SimplifyLogicalNegation = Factory.Create(
@@ -960,15 +960,27 @@ namespace Roslynator.CSharp
             customTags:         Array.Empty<string>());
 
         /// <summary>RCS1096</summary>
-        public static readonly DiagnosticDescriptor UseBitwiseOperationInsteadOfCallingHasFlag = Factory.Create(
-            id:                 DiagnosticIdentifiers.UseBitwiseOperationInsteadOfCallingHasFlag, 
-            title:              "Use bitwise operation instead of calling 'HasFlag'.", 
-            messageFormat:      "Use bitwise operation instead of calling 'HasFlag'.", 
+        public static readonly DiagnosticDescriptor ConvertHasFlagCallToBitwiseOperationOrViceVersa = Factory.Create(
+            id:                 DiagnosticIdentifiers.ConvertHasFlagCallToBitwiseOperationOrViceVersa, 
+            title:              "Convert 'HasFlag' call to bitwise operation (or vice versa).", 
+            messageFormat:      "Convert 'HasFlag' call to bitwise operation.", 
             category:           DiagnosticCategories.Performance, 
             defaultSeverity:    DiagnosticSeverity.Info, 
             isEnabledByDefault: true, 
             description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.UseBitwiseOperationInsteadOfCallingHasFlag, 
+            helpLinkUri:        DiagnosticIdentifiers.ConvertHasFlagCallToBitwiseOperationOrViceVersa, 
+            customTags:         Array.Empty<string>());
+
+        /// <summary>RCS1096i</summary>
+        public static readonly DiagnosticDescriptor ConvertBitwiseOperationToHasFlagCall = Factory.Create(
+            id:                 DiagnosticIdentifiers.ConvertBitwiseOperationToHasFlagCall, 
+            title:              "Convert bitwise operation to 'HasFlag' call.", 
+            messageFormat:      "Convert bitwise operation to 'HasFlag' call.", 
+            category:           DiagnosticCategories.AnalyzerOption, 
+            defaultSeverity:    DiagnosticSeverity.Info, 
+            isEnabledByDefault: false, 
+            description:        null, 
+            helpLinkUri:        DiagnosticIdentifiers.ConvertBitwiseOperationToHasFlagCall, 
             customTags:         Array.Empty<string>());
 
         /// <summary>RCS1097</summary>
@@ -1065,6 +1077,18 @@ namespace Roslynator.CSharp
             isEnabledByDefault: true, 
             description:        null, 
             helpLinkUri:        DiagnosticIdentifiers.SimplifyConditionalExpression, 
+            customTags:         Array.Empty<string>());
+
+        /// <summary>RCS1104a</summary>
+        public static readonly DiagnosticDescriptor SimplifyConditionalExpressionWhenItIncludesNegationOfCondition = Factory.Create(
+            id:                 DiagnosticIdentifiers.SimplifyConditionalExpressionWhenItIncludesNegationOfCondition, 
+            title:              "Simplify conditional expression (when it includes negation of condition).", 
+            messageFormat:      "Simplify conditional expression (when it includes negation of condition).", 
+            category:           DiagnosticCategories.AnalyzerOption, 
+            defaultSeverity:    DiagnosticSeverity.Info, 
+            isEnabledByDefault: false, 
+            description:        null, 
+            helpLinkUri:        DiagnosticIdentifiers.SimplifyConditionalExpressionWhenItIncludesNegationOfCondition, 
             customTags:         Array.Empty<string>());
 
         /// <summary>RCS1105</summary>
@@ -2476,18 +2500,6 @@ namespace Roslynator.CSharp
             description:        null, 
             helpLinkUri:        DiagnosticIdentifiers.SimplifyDefaultExpression, 
             customTags:         WellKnownDiagnosticTags.Unnecessary);
-
-        /// <summary>RCS1245</summary>
-        public static readonly DiagnosticDescriptor SimplifyConditionalExpression2 = Factory.Create(
-            id:                 DiagnosticIdentifiers.SimplifyConditionalExpression2, 
-            title:              "Simplify conditional expression.", 
-            messageFormat:      "Simplify conditional expression.", 
-            category:           DiagnosticCategories.Simplification, 
-            defaultSeverity:    DiagnosticSeverity.Hidden, 
-            isEnabledByDefault: true, 
-            description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.SimplifyConditionalExpression2, 
-            customTags:         Array.Empty<string>());
 
         /// <summary>RCS1246</summary>
         public static readonly DiagnosticDescriptor UseElementAccess = Factory.Create(

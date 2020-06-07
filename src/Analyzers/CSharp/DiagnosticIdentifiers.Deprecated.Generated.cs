@@ -35,6 +35,8 @@ namespace Roslynator.CSharp
         [Obsolete("", error: true)]
         public const string AvoidInterpolatedStringWithNoInterpolation = "RCS1062";
         [Obsolete("", error: true)]
+        public const string RemoveArgumentListFromObjectCreation2 = "RCS1067";
+        [Obsolete("", error: true)]
         public const string FormatDeclarationBraces = "RCS1076";
         [Obsolete("", error: true)]
         public const string UseCountOrLengthPropertyInsteadOfCountMethod = "RCS1082";
@@ -98,5 +100,7 @@ namespace Roslynator.CSharp
         public const string FormatConditionalExpression = "RCS1184";
         [Obsolete("", error: true)]
         public const string FormatSingleLineBlock = "RCS1185";
+        [Obsolete("", error: true)]
+        public const string SimplifyConditionalExpression2 = "RCS1245";
     }
 }
