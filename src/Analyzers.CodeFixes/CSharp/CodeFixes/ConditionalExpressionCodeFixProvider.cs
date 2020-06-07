@@ -28,11 +28,8 @@ namespace Roslynator.CSharp.CodeFixes
             get
             {
                 return ImmutableArray.Create(
-                    DiagnosticIdentifiers.ParenthesizeConditionOfConditionalExpression,
                     DiagnosticIdentifiers.UseCoalesceExpressionInsteadOfConditionalExpression,
                     DiagnosticIdentifiers.SimplifyConditionalExpression,
-                    DiagnosticIdentifiers.SimplifyConditionalExpression2,
-                    DiagnosticIdentifiers.FormatConditionalExpression,
                     DiagnosticIdentifiers.UseConditionalAccessInsteadOfConditionalExpression,
                     DiagnosticIdentifiers.AvoidNestedConditionalOperators);
             }
@@ -51,16 +48,6 @@ namespace Roslynator.CSharp.CodeFixes
             {
                 switch (diagnostic.Id)
                 {
-                    case DiagnosticIdentifiers.ParenthesizeConditionOfConditionalExpression:
-                        {
-                            CodeAction codeAction = CodeAction.Create(
-                                "Parenthesize condition",
-                                cancellationToken => ParenthesizeConditionOfConditionalExpressionAsync(document, conditionalExpression, cancellationToken),
-                                GetEquivalenceKey(diagnostic));
-
-                            context.RegisterCodeFix(codeAction, diagnostic);
-                            break;
-                        }
                     case DiagnosticIdentifiers.UseCoalesceExpressionInsteadOfConditionalExpression:
                         {
                             CodeAction codeAction = CodeAction.Create(
@@ -78,27 +65,10 @@ namespace Roslynator.CSharp.CodeFixes
                             break;
                         }
                     case DiagnosticIdentifiers.SimplifyConditionalExpression:
-                    case DiagnosticIdentifiers.SimplifyConditionalExpression2:
                         {
                             CodeAction codeAction = CodeAction.Create(
                                 "Simplify conditional expression",
                                 ct => SimplifyConditionalExpressionAsync(document, conditionalExpression, ct),
-                                GetEquivalenceKey(diagnostic));
-
-                            context.RegisterCodeFix(codeAction, diagnostic);
-                            break;
-                        }
-                    case DiagnosticIdentifiers.FormatConditionalExpression:
-                        {
-                            CodeAction codeAction = CodeAction.Create(
-                                "Format ? and : on next line",
-                                cancellationToken =>
-                                {
-                                    return FormatConditionalExpressionRefactoring.RefactorAsync(
-                                        document,
-                                        conditionalExpression,
-                                        cancellationToken);
-                                },
                                 GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
@@ -266,20 +236,6 @@ namespace Roslynator.CSharp.CodeFixes
                 .WithLeadingTrivia(conditionalExpression.GetLeadingTrivia())
                 .WithTrailingTrivia(trailingTrivia)
                 .WithSimplifierAnnotation();
-        }
-
-        private static Task<Document> ParenthesizeConditionOfConditionalExpressionAsync(
-            Document document,
-            ConditionalExpressionSyntax conditionalExpression,
-            CancellationToken cancellationToken)
-        {
-            ConditionalExpressionSyntax newNode = conditionalExpression
-                .WithCondition(
-                    ParenthesizedExpression(conditionalExpression.Condition.WithoutTrivia())
-                        .WithTriviaFrom(conditionalExpression.Condition))
-                .WithFormatterAnnotation();
-
-            return document.ReplaceNodeAsync(conditionalExpression, newNode, cancellationToken);
         }
     }
 }

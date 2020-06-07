@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Josef Pihrt. All rights reserved. Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -24,7 +23,7 @@ namespace Roslynator.CSharp.Analysis
                     DiagnosticDescriptors.OptimizeLinqMethodCall,
                     DiagnosticDescriptors.UseElementAccess,
                     DiagnosticDescriptors.UseCountOrLengthPropertyInsteadOfAnyMethod,
-                    DiagnosticDescriptors.UseBitwiseOperationInsteadOfCallingHasFlag,
+                    DiagnosticDescriptors.ConvertHasFlagCallToBitwiseOperationOrViceVersa,
                     DiagnosticDescriptors.RemoveRedundantToStringCall,
                     DiagnosticDescriptors.RemoveRedundantStringToCharArrayCall,
                     DiagnosticDescriptors.CombineEnumerableWhereMethodChain,
@@ -111,7 +110,7 @@ namespace Roslynator.CSharp.Analysis
                                 {
                                     if (!context.IsAnalyzerSuppressed(DiagnosticDescriptors.OptimizeLinqMethodCall))
                                     {
-                                        if (!invocationInfo.Expression.IsKind(SyntaxKind.InvocationExpression)
+                                        if (CanUseElementAccess(context, invocationInfo)
                                             && UseElementAccessAnalysis.IsFixableFirst(invocationInfo, context.SemanticModel, context.CancellationToken))
                                         {
                                             DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.UseElementAccess, Location.Create(invocation.SyntaxTree, TextSpan.FromBounds(invocationInfo.Name.SpanStart, invocationInfo.ArgumentList.Span.End)));
@@ -231,7 +230,7 @@ namespace Roslynator.CSharp.Analysis
                             case "ElementAt":
                                 {
                                     if (!context.IsAnalyzerSuppressed(DiagnosticDescriptors.OptimizeLinqMethodCall)
-                                        && !invocationInfo.Expression.IsKind(SyntaxKind.InvocationExpression)
+                                        && CanUseElementAccess(context, invocationInfo)
                                         && UseElementAccessAnalysis.IsFixableElementAt(invocationInfo, context.SemanticModel, context.CancellationToken))
                                     {
                                         DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.UseElementAccess, Location.Create(invocation.SyntaxTree, TextSpan.FromBounds(invocationInfo.Name.SpanStart, invocationInfo.ArgumentList.Span.End)));
@@ -271,11 +270,11 @@ namespace Roslynator.CSharp.Analysis
                                 }
                             case "HasFlag":
                                 {
-                                    if (!context.IsAnalyzerSuppressed(DiagnosticDescriptors.UseBitwiseOperationInsteadOfCallingHasFlag)
+                                    if (!context.IsAnalyzerSuppressed(DiagnosticDescriptors.ConvertHasFlagCallToBitwiseOperationOrViceVersa)
                                         && !invocation.SpanContainsDirectives()
-                                        && UseBitwiseOperationInsteadOfCallingHasFlagAnalysis.IsFixable(invocationInfo, context.SemanticModel, context.CancellationToken))
+                                        && ConvertHasFlagCallToBitwiseOperationAnalysis.IsFixable(invocationInfo, context.SemanticModel, context.CancellationToken))
                                     {
-                                        DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.UseBitwiseOperationInsteadOfCallingHasFlag, invocation);
+                                        DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.ConvertHasFlagCallToBitwiseOperationOrViceVersa, invocation);
                                     }
 
                                     break;
@@ -448,6 +447,13 @@ namespace Roslynator.CSharp.Analysis
             {
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.UseMethodChaining, invocationInfo.InvocationExpression);
             }
+        }
+
+        public static bool CanUseElementAccess(SyntaxNodeAnalysisContext context, in SimpleMemberInvocationExpressionInfo invocationInfo)
+        {
+            return !invocationInfo.Expression.IsKind(SyntaxKind.ElementAccessExpression)
+                && (!invocationInfo.Expression.IsKind(SyntaxKind.InvocationExpression)
+                    || context.IsAnalyzerSuppressed(DiagnosticDescriptors.DoNotUseElementAccessWhenExpressionIsInvocation));
         }
     }
 }
