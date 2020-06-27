@@ -2445,39 +2445,39 @@ namespace Roslynator.CSharp
         {
             /// <summary>RCS1050i</summary>
             public static readonly DiagnosticDescriptor RemoveArgumentListFromObjectCreation = DiagnosticDescriptorFactory.Default.Create(
-            id:                 DiagnosticIdentifiers.AddArgumentListToObjectCreationOrViceVersa, 
-            title:              "Add argument list to object creation expression (or vice versa).", 
-            messageFormat:      "Remove argument list from object creation expression.", 
-            category:           DiagnosticCategories.Style, 
-            defaultSeverity:    DiagnosticSeverity.Info, 
-            isEnabledByDefault: false, 
-            description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.AddArgumentListToObjectCreationOrViceVersa, 
-            customTags:         Array.Empty<string>());
+                id:                 DiagnosticIdentifiers.AddArgumentListToObjectCreationOrViceVersa, 
+                title:              "Add argument list to object creation expression (or vice versa).", 
+                messageFormat:      "Remove argument list from object creation expression.", 
+                category:           DiagnosticCategories.Style, 
+                defaultSeverity:    DiagnosticSeverity.Info, 
+                isEnabledByDefault: false, 
+                description:        null, 
+                helpLinkUri:        DiagnosticIdentifiers.AddArgumentListToObjectCreationOrViceVersa, 
+                customTags:         Array.Empty<string>());
 
             /// <summary>RCS1051a</summary>
             public static readonly DiagnosticDescriptor RemoveParenthesesFromConditionOfConditionalExpressionWhenExpressionIsSingleToken = DiagnosticDescriptorFactory.Default.Create(
-            id:                 DiagnosticIdentifiers.ParenthesizeConditionOfConditionalExpression, 
-            title:              "Parenthesize condition of conditional expression.", 
-            messageFormat:      "Remove parentheses from condition of conditional expression (when condition is a single token).", 
-            category:           DiagnosticCategories.Style, 
-            defaultSeverity:    DiagnosticSeverity.Info, 
-            isEnabledByDefault: false, 
-            description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.ParenthesizeConditionOfConditionalExpression, 
-            customTags:         Array.Empty<string>());
+                id:                 DiagnosticIdentifiers.ParenthesizeConditionOfConditionalExpression, 
+                title:              "Parenthesize condition of conditional expression.", 
+                messageFormat:      "Remove parentheses from condition of conditional expression (when condition is a single token).", 
+                category:           DiagnosticCategories.Style, 
+                defaultSeverity:    DiagnosticSeverity.Info, 
+                isEnabledByDefault: false, 
+                description:        null, 
+                helpLinkUri:        DiagnosticIdentifiers.ParenthesizeConditionOfConditionalExpression, 
+                customTags:         Array.Empty<string>());
 
             /// <summary>RCS1096i</summary>
             public static readonly DiagnosticDescriptor ConvertBitwiseOperationToHasFlagCall = DiagnosticDescriptorFactory.Default.Create(
-            id:                 DiagnosticIdentifiers.ConvertHasFlagCallToBitwiseOperationOrViceVersa, 
-            title:              "Convert 'HasFlag' call to bitwise operation (or vice versa).", 
-            messageFormat:      "Convert bitwise operation to 'HasFlag' call.", 
-            category:           DiagnosticCategories.Performance, 
-            defaultSeverity:    DiagnosticSeverity.Info, 
-            isEnabledByDefault: true, 
-            description:        null, 
-            helpLinkUri:        DiagnosticIdentifiers.ConvertHasFlagCallToBitwiseOperationOrViceVersa, 
-            customTags:         Array.Empty<string>());
+                id:                 DiagnosticIdentifiers.ConvertHasFlagCallToBitwiseOperationOrViceVersa, 
+                title:              "Convert 'HasFlag' call to bitwise operation (or vice versa).", 
+                messageFormat:      "Convert bitwise operation to 'HasFlag' call.", 
+                category:           DiagnosticCategories.Performance, 
+                defaultSeverity:    DiagnosticSeverity.Info, 
+                isEnabledByDefault: true, 
+                description:        null, 
+                helpLinkUri:        DiagnosticIdentifiers.ConvertHasFlagCallToBitwiseOperationOrViceVersa, 
+                customTags:         Array.Empty<string>());
 
         }
     }

@@ -153,7 +153,18 @@ namespace Roslynator.CodeGeneration.CSharp
 
         private class Rewriter : CSharpSyntaxRewriter
         {
+            private int _classDeclarationDepth;
+
             public static Rewriter Instance { get; } = new Rewriter();
+
+            public override SyntaxNode VisitClassDeclaration(ClassDeclarationSyntax node)
+            {
+                _classDeclarationDepth++;
+                SyntaxNode result = base.VisitClassDeclaration(node);
+                _classDeclarationDepth--;
+
+                return result;
+            }
 
             public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
             {
@@ -167,7 +178,7 @@ namespace Roslynator.CodeGeneration.CSharp
                 if (node.NameColon != null)
                 {
                     return node
-                        .WithNameColon(node.NameColon.AppendToLeadingTrivia(TriviaList(NewLine(), Whitespace("            "))))
+                        .WithNameColon(node.NameColon.AppendToLeadingTrivia(TriviaList(NewLine(), Whitespace(new string(' ', 4 * (2 + _classDeclarationDepth))))))
                         .WithExpression(node.Expression.PrependToLeadingTrivia(Whitespace(new string(' ', 18 - node.NameColon.Name.Identifier.ValueText.Length))));
                 }
 
