@@ -2441,6 +2441,20 @@ namespace Roslynator.CSharp
             helpLinkUri:        DiagnosticIdentifiers.UseElementAccess, 
             customTags:         Array.Empty<string>());
 
+        /// <summary>RCS1247</summary>
+        public static readonly DiagnosticDescriptor UseNullCoalescingAssignmentOperator = DiagnosticDescriptorFactory.Default.Create(
+            id:                 DiagnosticIdentifiers.UseNullCoalescingAssignmentOperator, 
+            title:              "Use null-coalescing assignment operator.", 
+            messageFormat:      "Use null-coalescing assignment operator.", 
+            category:           DiagnosticCategories.Usage, 
+            defaultSeverity:    DiagnosticSeverity.Info, 
+            isEnabledByDefault: true, 
+            description:        null, 
+            helpLinkUri:        DiagnosticIdentifiers.UseNullCoalescingAssignmentOperator, 
+            customTags:         Array.Empty<string>());
+
+        public static readonly DiagnosticDescriptor UseNullCoalescingAssignmentOperatorFadeOut = DiagnosticDescriptorFactory.CreateFadeOut(UseNullCoalescingAssignmentOperator);
+
         public static partial class ReportOnly
         {
             /// <summary>RCS1050i</summary>

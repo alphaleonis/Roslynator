@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Analyzers>
+  <Analyzer Identifier="UseNullCoalescingAssignmentOperator" IsDevelopment="true">
+    <Id>RCS1247</Id>
+    <Title>Use null-coalescing assignment operator.</Title>
+    <Category>Usage</Category>
+    <DefaultSeverity>Info</DefaultSeverity>
+    <IsEnabledByDefault>true</IsEnabledByDefault>
+    <SupportsFadeOutAnalyzer>true</SupportsFadeOutAnalyzer>
+    <MinLanguageVersion>8.0</MinLanguageVersion>
+    <Samples>
+      <Sample>
+        <Before><![CDATA[x ?? (x = M())]]></Before>
+        <After><![CDATA[x ??= M()]]></After>
+      </Sample>
+    </Samples>
+    <Links>
+      <Link>
+        <Url>https://docs.microsoft.com/dotnet/csharp/language-reference/operators/null-coalescing-operator</Url>
+        <Text>?? and ??= operators</Text>
+      </Link>
+    </Links>
+  </Analyzer>
+</Analyzers>
