@@ -58,10 +58,12 @@ namespace Roslynator.CSharp.CodeFixes
 
             var simpleAssignment = (AssignmentExpressionSyntax)parenthesizedExpression.Expression;
 
+            ExpressionSyntax right = simpleAssignment.Right;
+
             AssignmentExpressionSyntax assignmentExpression = CSharpFactory.CoalesceAssignmentExpression(
                 coalesceExpression.Left,
                 SyntaxFactory.Token(coalesceExpression.OperatorToken.LeadingTrivia, SyntaxKind.QuestionQuestionEqualsToken, coalesceExpression.OperatorToken.TrailingTrivia),
-                simpleAssignment.Right.AppendToTrailingTrivia(parenthesizedExpression.GetTrailingTrivia()));
+                right.WithoutTrivia().Parenthesize().WithTriviaFrom(right).AppendToTrailingTrivia(parenthesizedExpression.GetTrailingTrivia()));
 
             return await document.ReplaceNodeAsync(coalesceExpression, assignmentExpression, cancellationToken).ConfigureAwait(false);
         }
