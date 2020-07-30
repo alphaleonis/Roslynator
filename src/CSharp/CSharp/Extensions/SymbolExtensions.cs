@@ -16,15 +16,6 @@ namespace Roslynator.CSharp
     /// </summary>
     public static class SymbolExtensions
     {
-        private static SymbolDisplayFormat DefaultSymbolDisplayFormat { get; } = new SymbolDisplayFormat(
-            globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Included,
-            genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
-            typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-            miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes
-                | SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
-
-        private static SymbolDisplayFormat IsReadOnlyStructSymbolDisplayFormat { get; } = new SymbolDisplayFormat(kindOptions: SymbolDisplayKindOptions.IncludeTypeKeyword);
-
         #region INamedTypeSymbol
         internal static string ToDisplayString(this INamedTypeSymbol typeSymbol, SymbolDisplayFormat format, SymbolDisplayTypeDeclarationOptions typeDeclarationOptions)
         {
@@ -178,7 +169,7 @@ namespace Roslynator.CSharp
 
             ThrowIfExplicitDeclarationIsNotSupported(namespaceSymbol);
 
-            return ParseTypeName(namespaceSymbol.ToDisplayString(format ?? DefaultSymbolDisplayFormat));
+            return ParseTypeName(namespaceSymbol.ToDisplayString(format ?? SymbolDisplayFormats.FullName));
         }
 
         /// <summary>
@@ -198,7 +189,7 @@ namespace Roslynator.CSharp
 
             ThrowIfExplicitDeclarationIsNotSupported(namespaceSymbol);
 
-            return ParseTypeName(namespaceSymbol.ToMinimalDisplayString(semanticModel, position, format ?? DefaultSymbolDisplayFormat));
+            return ParseTypeName(namespaceSymbol.ToMinimalDisplayString(semanticModel, position, format ?? SymbolDisplayFormats.FullName));
         }
 
         private static void ThrowIfExplicitDeclarationIsNotSupported(INamespaceSymbol namespaceSymbol)
@@ -282,7 +273,7 @@ namespace Roslynator.CSharp
 
             ThrowIfExplicitDeclarationIsNotSupported(typeSymbol);
 
-            return ParseTypeName(typeSymbol.ToDisplayString(format ?? DefaultSymbolDisplayFormat));
+            return ParseTypeName(typeSymbol.ToDisplayString(format ?? SymbolDisplayFormats.FullName));
         }
 
         /// <summary>
@@ -302,7 +293,7 @@ namespace Roslynator.CSharp
 
             ThrowIfExplicitDeclarationIsNotSupported(typeSymbol);
 
-            return ParseTypeName(typeSymbol.ToMinimalDisplayString(semanticModel, position, format ?? DefaultSymbolDisplayFormat));
+            return ParseTypeName(typeSymbol.ToMinimalDisplayString(semanticModel, position, format ?? SymbolDisplayFormats.FullName));
         }
 
         private static void ThrowIfExplicitDeclarationIsNotSupported(ITypeSymbol typeSymbol)
@@ -353,10 +344,8 @@ namespace Roslynator.CSharp
 
         internal static bool IsReadOnlyStruct(this ITypeSymbol type)
         {
-            return type.TypeKind == TypeKind.Struct
-                && type
-                    .ToDisplayParts(IsReadOnlyStructSymbolDisplayFormat)
-                    .Any(f => f.Kind == SymbolDisplayPartKind.Keyword && f.ToString() == "readonly");
+            return type.IsReadOnly
+                && type.TypeKind == TypeKind.Struct;
         }
         #endregion ITypeSymbol
     }
