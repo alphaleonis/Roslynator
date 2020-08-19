@@ -39,25 +39,54 @@ namespace Roslynator.CSharp.Analysis
 
             IMethodSymbol methodSymbol = context.SemanticModel.GetMethodSymbol(invocationExpression, context.CancellationToken);
 
-            if (methodSymbol?.ReturnType.IsReferenceType != true)
+            if (methodSymbol?.ReturnType.IsReferenceTypeOrNullableType() != true)
                 return;
+
+            methodSymbol = methodSymbol.ReducedFromOrSelf();
 
             INamedTypeSymbol containingType = methodSymbol.ContainingType;
 
             if (containingType == null)
                 return;
 
-            if (methodSymbol.IsExtensionMethod)
-            {
-                if (containingType.HasMetadataName(MetadataNames.System_Linq_Enumerable))
-                    ReportDiagnostic(context, expression);
-            }
-            else if (!methodSymbol.IsStatic)
-            {
-                Debug.Assert(containingType.Implements(SpecialType.System_Collections_Generic_IEnumerable_T, allInterfaces: true), "Type does not implement IEnumerable<T>");
+            string methodName = methodSymbol.Name.Remove(methodSymbol.Name.Length - "OrDefault".Length);
 
-                if (containingType.Implements(SpecialType.System_Collections_Generic_IEnumerable_T, allInterfaces: true))
-                    ReportDiagnostic(context, expression);
+            if (!ContainsComplementMethod(methodSymbol, containingType.GetMembers(methodName)))
+                return;
+
+            ReportDiagnostic(context, expression);
+
+            static bool ContainsComplementMethod(IMethodSymbol methodSymbol, ImmutableArray<ISymbol> symbols)
+            {
+                foreach (ISymbol symbol in symbols)
+                {
+                    if (symbol.Kind != SymbolKind.Method)
+                        continue;
+
+                    var methodSymbol2 = (IMethodSymbol)symbol;
+
+                    if (methodSymbol.TypeParameters.Length != methodSymbol2.TypeParameters.Length)
+                        continue;
+
+                    if (!SymbolEqualityComparer.Default.Equals(methodSymbol.ReturnType, methodSymbol2.ReturnType))
+                        continue;
+
+                    ImmutableArray<IParameterSymbol> parameters = methodSymbol.Parameters;
+                    ImmutableArray<IParameterSymbol> parameters2 = methodSymbol2.Parameters;
+
+                    if (parameters.Length != parameters2.Length)
+                        continue;
+
+                    for (int i = 0; i < parameters.Length; i++)
+                    {
+                        if (!SymbolEqualityComparer.Default.Equals(parameters[i], parameters2[i]))
+                            continue;
+                    }
+
+                    return true;
+                }
+
+                return false;
             }
         }
 
